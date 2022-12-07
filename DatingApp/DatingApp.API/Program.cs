@@ -15,20 +15,12 @@ internal class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-
+        //add the config for database
         builder.Services.AddDbContext<DataContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        //adding cors
-        // builder.Services.AddMvc();
-        // builder.Services.AddCors();//options =>
-        // // {
-        // //     options.AddPolicy(name: MyAllowSpecificOrigins,
-        // //                         builder =>
-        // //                         {
-        // //                             builder.WithOrigins("http://localhost:4200");
-        // //                         });
-        // // });
+        //add IAuth and Auth repositiories
+        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
         var app = builder.Build();
 
@@ -42,7 +34,7 @@ internal class Program
         app.UseHttpsRedirection();
 
         //adding cors
-        // app.UseCors(MyAllowSpecificOrigins);
+
         app.UseCors(x => x
         .AllowAnyHeader()
         .AllowAnyMethod()

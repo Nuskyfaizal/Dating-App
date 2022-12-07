@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "EX1": {
+    "eX1": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -119,6 +119,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "EX1"
 }
