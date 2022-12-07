@@ -1,0 +1,6 @@
+bin
+obj
+.vscode
+*.db
+frontend
+WeatherForecast.cs
