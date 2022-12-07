@@ -19,6 +19,17 @@ internal class Program
         builder.Services.AddDbContext<DataContext>(options =>
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        //adding cors
+        // builder.Services.AddMvc();
+        // builder.Services.AddCors();//options =>
+        // // {
+        // //     options.AddPolicy(name: MyAllowSpecificOrigins,
+        // //                         builder =>
+        // //                         {
+        // //                             builder.WithOrigins("http://localhost:4200");
+        // //                         });
+        // // });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -30,10 +41,19 @@ internal class Program
 
         app.UseHttpsRedirection();
 
+        //adding cors
+        // app.UseCors(MyAllowSpecificOrigins);
+        app.UseCors(x => x
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin());
+
         app.UseAuthorization();
 
         app.MapControllers();
 
         app.Run();
+
+
     }
 }
