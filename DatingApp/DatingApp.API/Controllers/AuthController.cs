@@ -6,11 +6,13 @@ using System.Text;
 using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using DatingApp.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
@@ -45,8 +47,8 @@ namespace DatingApp.API.Controllers
             return StatusCode(201);
         }
 
-        [HttpPost("login")]
 
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(),
