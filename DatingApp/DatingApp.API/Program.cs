@@ -1,6 +1,9 @@
 using DatingApp.API.Data;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using DatingApp.API.Helpers;
 
 internal class Program
 {
@@ -22,6 +25,9 @@ internal class Program
         //add IAuth and Auth repositiories
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
+        //add authentication
+        builder.Services.AddAuthentication();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -29,6 +35,26 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseDeveloperExceptionPage();
+
+        }
+        else
+        {
+            app.UseExceptionHandler(builder =>
+            {
+                builder.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+
+                    if (error != null)
+                    {
+                        context.Response.AddApplicationError(error.Error.Message);
+                        await context.Response.WriteAsync(error.Error.Message);
+                    }
+                });
+            });
         }
 
         app.UseHttpsRedirection();
