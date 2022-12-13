@@ -14,13 +14,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Dating App</a>
+      <a class="navbar-brand" [routerLink]="['/home']">Dating App</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul *ngIf="loggedIn()" class="nav navbar-nav">
-        <li><a href="#">Matches</a></li>
-        <li><a href="#">Lists</a></li>
-        <li><a href="#">Messages</a></li>
+        <li routerLinkActive="active">
+          <a [routerLink]="['/members']">Matches</a>
+        </li>
+        <li routerLinkActive="active">
+          <a [routerLink]="['/lists']">Lists</a>
+        </li>
+        <li routerLinkActive="active">
+          <a [routerLink]="['/messages']">Messages</a>
+        </li>
       </ul>
 
       <form
@@ -63,7 +69,7 @@
       <!------->
       <ul *ngIf="loggedIn()" class="nav navbar-nav navbar-right">
         <li class="dropdown" dropdown>
-          <a href="#" class="dropdown-toggle" dropdownToggle
+          <a (click)="(false)" class="dropdown-toggle" dropdownToggle
             >Welcome {{ authService.decodedToken?.unique_name | titlecase
             }}<span class="caret"></span
           ></a>
