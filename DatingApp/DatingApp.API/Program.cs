@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using DatingApp.API.Helpers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 internal class Program
 {
@@ -22,13 +25,41 @@ internal class Program
         builder.Services.AddDbContext<DataContext>(options =>
         options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        //add IAuth and Auth repositiories
+        //add repositiories
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<IDatingRepository, DatingRepository>();
 
         //add authentication
         builder.Services.AddAuthentication();
 
+        builder.Services.AddTransient<Seed>();
+        //Handling object cycle reference error
+        builder.Services.AddControllersWithViews().AddJsonOptions(opt =>
+            opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+        /*****/
         var app = builder.Build();
+
+        //seeding the data into the database
+        if (args.Length == 1 && args[0].ToLower() == "seeddata")
+        {
+            SeedData(app);
+        }
+
+        void SeedData(IHost app)
+        {
+            var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+            using (var scope = scopedFactory.CreateScope())
+            {
+                var service = scope.ServiceProvider.GetService<Seed>();
+                //service.SeedUsers();
+            }
+        }
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
