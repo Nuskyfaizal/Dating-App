@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import {
-  CanActivate,
-  CanActivateChild,
-  CanDeactivate,
-  CanLoad,
-  Route,
-  UrlSegment,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  UrlTree,
+  CanActivate,
   Router,
+  RouterStateSnapshot,
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AlertifyService } from '../_services/alertify.service';
@@ -25,13 +19,16 @@ export class AuthGuard implements CanActivate {
     private alertify: AlertifyService
   ) {}
 
-  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.authService.loggedIn()) {
+  canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> | boolean {
+    if (this.authService.loggedIn() == true) {
       return true;
+    } else {
+      this.alertify.error('You need to be logged in to access this area');
+      this.router.navigate(['/home']);
+      return false;
     }
-
-    this.alertify.error('You need to be logged in to access this area');
-    this.router.navigate(['/home']);
-    return false;
   }
 }

@@ -75,7 +75,11 @@
           ></a>
           <ul class="dropdown-menu" *dropdownMenu>
             <li>
-              <a href="#"><i class="fa fa-user"></i>Edit Profile</a>
+              <a
+                [routerLink]="['/member/edit']"
+                routerLinkActive="router-link-active"
+                ><i class="fa fa-user"></i>Edit Profile</a
+              >
             </li>
             <li role="separator" class="divider"></li>
             <li>

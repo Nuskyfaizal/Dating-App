@@ -16,7 +16,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
-import { AuthGuard } from './_guards/auth.guard';
 import { UserService } from './_services/user.service';
 import { MemberComonentComponent } from './members/member-comonent/member-comonent.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
@@ -24,6 +23,10 @@ import { TabsModule } from 'ngx-bootstrap';
 import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
 import { MemberListResolver } from './_resolvers/member-list.resolver';
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
+import { AuthGuard } from './_guards/auth.guard';
+import { MemberEditComponent } from './members/member-edit/member-edit.component';
+import { MemberEditResolver } from './_resolvers/member-edit.resolver';
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
     MessagesComponent,
     MemberComonentComponent,
     MemberDetailComponent,
+    MemberEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,10 +61,12 @@ import { NgxGalleryModule } from '@kolkov/ngx-gallery';
   providers: [
     AuthService,
     AlertifyService,
-    AuthGuard,
     UserService,
     MemberDetailResolver,
     MemberListResolver,
+    AuthGuard,
+    MemberEditResolver,
+    PreventUnsavedChanges,
   ],
   bootstrap: [AppComponent],
 })

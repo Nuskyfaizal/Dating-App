@@ -38,25 +38,12 @@ export class AuthService {
       .pipe(catchError(this.handleError));
   }
 
-  loggedIn() {
-    if (
-      localStorage.getItem('token') === '' ||
-      localStorage.getItem('token') === null ||
-      localStorage.getItem('token') === undefined
-    ) {
+  loggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) {
       return false;
-    } else {
-      return this.isTokenExpired();
     }
-  }
-
-  /***Helper Methods used as private** */
-  // Use the JWT helper to decode the token and get its payload
-
-  // Check whether the token is expired and return true or false
-  private isTokenExpired() {
-    const token = this.jwtHelper.tokenGetter();
-    return this.jwtHelper.isTokenExpired(token);
+    return !this.jwtHelper.isTokenExpired(token);
   }
 
   //handling exxception from server
