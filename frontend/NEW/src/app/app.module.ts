@@ -13,10 +13,17 @@ import { RegisterComponent } from './register/register.component';
 import { AlertifyService } from './_services/alertify.service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { MemberListComponent } from './member-list/member-list.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { UserService } from './_services/user.service';
+import { MemberComonentComponent } from './members/member-comonent/member-comonent.component';
+import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { TabsModule } from 'ngx-bootstrap';
+import { MemberDetailResolver } from './_resolvers/member-detail.resolver';
+import { MemberListResolver } from './_resolvers/member-list.resolver';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 
 @NgModule({
   declarations: [
@@ -27,6 +34,8 @@ import { AuthGuard } from './_guards/auth.guard';
     MemberListComponent,
     ListsComponent,
     MessagesComponent,
+    MemberComonentComponent,
+    MemberDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,14 +46,22 @@ import { AuthGuard } from './_guards/auth.guard';
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
-          // Return the token from local storage, or null if it doesn't exist
-          return localStorage.getItem('access_token');
+          return localStorage.getItem('token');
         },
       },
     }),
     BsDropdownModule.forRoot(),
+    TabsModule.forRoot(),
+    NgxGalleryModule,
   ],
-  providers: [AuthService, AlertifyService, AuthGuard],
+  providers: [
+    AuthService,
+    AlertifyService,
+    AuthGuard,
+    UserService,
+    MemberDetailResolver,
+    MemberListResolver,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

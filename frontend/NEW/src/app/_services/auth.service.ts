@@ -1,46 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-// import { BehaviorSubject, Observable } from 'rxjs';
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/observable/throw';
-import { User } from '../Models/userModel';
+import { Observable, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
-  // private userSubject: BehaviorSubject<User>;
-  // public user: Observable<User>;
-
   baseUrl = 'https://localhost:7080/api/auth/';
   userToken: any;
   decodedToken: any;
 
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
-    // //this.userSubject = new BehaviorSubject<User>(
-    //   JSON.parse(localStorage.getItem('user'))
-    // );
-    // this.user = this.userSubject.asObservable();
-  }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   login(model: any) {
-    return this.http.post(this.baseUrl + 'login', model).pipe(
-      map((response) => {
+    const headers = new HttpHeaders({ 'Content-type': 'application/json' });
+    return this.http.post(this.baseUrl + 'login', model, { headers }).pipe(
+      map((response: any) => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         const user = response;
-        if (user) {
+        if (user && user.tokenString) {
           localStorage.setItem('token', JSON.stringify(user));
           this.decodedToken = this.jwtHelper.decodeToken(JSON.stringify(user));
           console.log(this.decodedToken);
           this.userToken = user;
         }
-      }) //.catch(this.handleError);
+      }),
+      catchError(this.handleError)
     );
   }
 
   register(models: any) {
-    return this.http.post(this.baseUrl + 'register', models);
+    return this.http
+      .post(this.baseUrl + 'register', models)
+      .pipe(catchError(this.handleError));
   }
 
   loggedIn() {
@@ -64,21 +59,21 @@ export class AuthService {
     return this.jwtHelper.isTokenExpired(token);
   }
 
-  // private handleError(error:any) {
-  //   const applicationError = error.headers.get('Application-Error');
-  //   if(applicationError){
-  //     return Observable.throw(applicationError);
-  //   }
-  //   const serverError = error.json();
-  //   let modelStateErrors = "";
-  //   if(serverError){
-  //     for(const key in serverError){
-  //       if(serverError[key]) {
-  //         modelStateErrors += serverError[key] + '\n';
-  //       }
-  //     }
-  //   }
-  //   return Observable.throw(
-  //     modelStateErrors || 'Server Error'
-  //   );
+  //handling exxception from server
+  private handleError(error: HttpErrorResponse) {
+    const applicationError = error.headers.get('Application-Error');
+    if (applicationError) {
+      return throwError(applicationError);
+    }
+    const serverError = error.error;
+    let modelStateErrors = '';
+    if (serverError) {
+      for (const key in serverError) {
+        if (serverError[key]) {
+          modelStateErrors += serverError[key] + '\n';
+        }
+      }
+    }
+    return throwError(modelStateErrors || 'Server Error');
+  }
 }

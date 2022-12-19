@@ -7,6 +7,10 @@ using DatingApp.API.Helpers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
 internal class Program
 {
@@ -30,7 +34,18 @@ internal class Program
         builder.Services.AddScoped<IDatingRepository, DatingRepository>();
 
         //add authentication
-        builder.Services.AddAuthentication();
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+         .AddJwtBearer(options =>
+         {
+             options.TokenValidationParameters = new TokenValidationParameters
+             {
+                 ValidateIssuerSigningKey = true,
+                 //IssuerSigningKey = new SymmetricSecurityKey(key),
+                 ValidateIssuer = false,
+                 ValidateAudience = false
+             };
+         });
 
         builder.Services.AddTransient<Seed>();
         //Handling object cycle reference error
@@ -98,6 +113,7 @@ internal class Program
         .AllowAnyOrigin());
 
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapControllers();
 
