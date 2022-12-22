@@ -22,7 +22,7 @@ export class UserService {
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id).pipe(
+    return this.http.get<User>(this.baseUrl + 'users/' + id, this.jwt()).pipe(
       map((response) => response),
       catchError(this.handleError)
     );
@@ -30,7 +30,7 @@ export class UserService {
 
   updateUser(id: number, user: User) {
     return this.http
-      .put(this.baseUrl + 'users/' + id, user)
+      .post(this.baseUrl + 'users/' + id, user, this.jwt())
       .pipe(catchError(this.handleError));
   }
 

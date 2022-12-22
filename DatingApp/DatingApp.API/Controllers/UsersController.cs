@@ -40,15 +40,24 @@ namespace DatingApp.API.Controllers
         }
 
         //api/users/1 PUT:
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserForUpdateDTO userForUpdateDto)
         {
+
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
 
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var userFromRepo = await _repo.GetUser(id);
+
+
+            if (userForUpdateDto == null)
+            {
+                return BadRequest();
+            }
 
             if (userFromRepo == null)
                 return NotFound($"Could not find user with an ID of {id}");
@@ -59,6 +68,7 @@ namespace DatingApp.API.Controllers
             }
 
             _mapper.Map(userForUpdateDto, userFromRepo);
+
 
             if (await _repo.SaveAll())
                 return NoContent();

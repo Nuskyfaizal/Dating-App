@@ -14,9 +14,11 @@ using System.Text;
 
 internal class Program
 {
+
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
 
         // Add services to the container.
 
@@ -34,6 +36,7 @@ internal class Program
         builder.Services.AddScoped<IDatingRepository, DatingRepository>();
 
         //add authentication
+        //var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("AppSettings:token"));
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          .AddJwtBearer(options =>
@@ -41,7 +44,7 @@ internal class Program
              options.TokenValidationParameters = new TokenValidationParameters
              {
                  ValidateIssuerSigningKey = true,
-                 //IssuerSigningKey = new SymmetricSecurityKey(key),
+                 // IssuerSigningKey = new SymmetricSecurityKey(key),
                  ValidateIssuer = false,
                  ValidateAudience = false
              };
@@ -116,7 +119,7 @@ internal class Program
         app.UseAuthentication();
 
         app.MapControllers();
-
+        //app.UseMvc();
         app.Run();
 
 
