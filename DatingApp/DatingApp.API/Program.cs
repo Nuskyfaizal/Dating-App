@@ -36,7 +36,7 @@ internal class Program
         builder.Services.AddScoped<IDatingRepository, DatingRepository>();
 
         //add authentication
-        //var key = Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("AppSettings:token"));
+        var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value);
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
          .AddJwtBearer(options =>
@@ -44,7 +44,7 @@ internal class Program
              options.TokenValidationParameters = new TokenValidationParameters
              {
                  ValidateIssuerSigningKey = true,
-                 // IssuerSigningKey = new SymmetricSecurityKey(key),
+                 IssuerSigningKey = new SymmetricSecurityKey(key),
                  ValidateIssuer = false,
                  ValidateAudience = false
              };
@@ -56,6 +56,9 @@ internal class Program
             opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        //Configuring the cloudinary
+        builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 
         /*****/

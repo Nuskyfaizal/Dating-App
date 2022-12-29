@@ -39,7 +39,7 @@ export class UserService {
 
     if (token) {
       const headers = new HttpHeaders({
-        Authorization: 'Bearer ' + JSON.parse(token).tokenString,
+        Authorization: `Bearer ${token}`,
         'Content-type': 'application/json',
       });
       return { headers };

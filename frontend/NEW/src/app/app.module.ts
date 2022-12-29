@@ -31,8 +31,11 @@ import { AuthGuard } from './_guards/auth.guard';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
-//import { AuthInterceptor } from './auth-module/auth-interceptor.service';
+import { AuthInterceptor } from './auth-module/auth-interceptor.service';
 
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,9 +57,7 @@ import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
     FormsModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => {
-          return localStorage.getItem('token');
-        },
+        tokenGetter,
       },
     }),
     BsDropdownModule.forRoot(),

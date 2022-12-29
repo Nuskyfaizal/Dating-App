@@ -9,21 +9,22 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
-  baseUrl = 'https://localhost:7080/api/auth/';
+  baseUrl = 'http://localhost:5000/api/auth/';
   userToken: any;
   decodedToken: any;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
   login(model: any) {
-    const headers = new HttpHeaders({ 'Content-type': 'application/json' });
-    return this.http.post(this.baseUrl + 'login', model, { headers }).pipe(
+    // const headers = new HttpHeaders({ 'Content-type': 'application/json' });
+    return this.http.post(this.baseUrl + 'login', model).pipe(
       map((response: any) => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         const user = response;
-        if (user && user.tokenString) {
-          localStorage.setItem('token', JSON.stringify(user));
-          this.decodedToken = this.jwtHelper.decodeToken(JSON.stringify(user));
+        if (user) {
+          let token = user.token;
+          localStorage.setItem('token', token);
+          this.decodedToken = this.jwtHelper.decodeToken(token);
           console.log(this.decodedToken);
           this.userToken = user;
         }

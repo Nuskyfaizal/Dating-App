@@ -10,13 +10,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DatingApp.API.Controllers
 {
-    [AllowAnonymous]
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _repo;
-        public AuthController(IAuthRepository repo)
+        private readonly IConfiguration _config;
+
+        public AuthController(IAuthRepository repo, IConfiguration config)
         {
+            _config = config;
             _repo = repo;
         }
 
@@ -60,7 +62,7 @@ namespace DatingApp.API.Controllers
 
             //generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("super secret key");
+            var key = Encoding.ASCII.GetBytes(_config.GetValue<string>("AppSettings:token"));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -73,9 +75,8 @@ namespace DatingApp.API.Controllers
                 SecurityAlgorithms.HmacSha512Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new { tokenString });
+            return Ok(new { token = tokenHandler.WriteToken(token) });
         }
     }
 }

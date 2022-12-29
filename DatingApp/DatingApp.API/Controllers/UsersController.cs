@@ -43,16 +43,12 @@ namespace DatingApp.API.Controllers
         [HttpPost("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserForUpdateDTO userForUpdateDto)
         {
-
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
 
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var userFromRepo = await _repo.GetUser(id);
-
 
             if (userForUpdateDto == null)
             {
