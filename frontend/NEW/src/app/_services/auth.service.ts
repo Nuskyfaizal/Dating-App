@@ -21,8 +21,10 @@ export class AuthService {
       map((response: any) => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         const user = response;
+
         if (user) {
           let token = user.token;
+
           localStorage.setItem('token', token);
           this.decodedToken = this.jwtHelper.decodeToken(token);
           console.log(this.decodedToken);

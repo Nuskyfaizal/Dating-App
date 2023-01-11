@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp.API.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
@@ -23,9 +23,10 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var users = await _repo.GetUsers();
+            System.Console.WriteLine(users);
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDtos>>(users);
-
+            System.Console.WriteLine(usersToReturn);
             return Ok(usersToReturn);
         }
 
@@ -40,7 +41,7 @@ namespace DatingApp.API.Controllers
         }
 
         //api/users/1 PUT:
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserForUpdateDTO userForUpdateDto)
         {
             if (!ModelState.IsValid)

@@ -118,8 +118,10 @@ internal class Program
         .AllowAnyMethod()
         .AllowAnyOrigin());
 
-        app.UseAuthorization();
+
         app.UseAuthentication();
+        app.UseAuthorization();
+
 
         app.MapControllers();
         //app.UseMvc();

@@ -30,7 +30,7 @@ export class UserService {
 
   updateUser(id: number, user: User) {
     return this.http
-      .post(this.baseUrl + 'users/' + id, user, this.jwt())
+      .put(this.baseUrl + 'users/' + id, user, this.jwt())
       .pipe(catchError(this.handleError));
   }
 
@@ -39,9 +39,10 @@ export class UserService {
 
     if (token) {
       const headers = new HttpHeaders({
-        Authorization: `Bearer ${token}`,
+        Authorization: 'Bearer ' + token,
         'Content-type': 'application/json',
       });
+
       return { headers };
     }
   }
