@@ -25,6 +25,7 @@
     "bootstrap": "^3.4.1",
     "bootswatch": "^3.3.7",
     "font-awesome": "^4.7.0",
+    "ng2-file-upload": "^2.0.0-3",
     "ngx-bootstrap": "^4.3.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

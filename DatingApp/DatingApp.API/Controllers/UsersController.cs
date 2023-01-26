@@ -23,10 +23,8 @@ namespace DatingApp.API.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var users = await _repo.GetUsers();
-            System.Console.WriteLine(users);
 
             var usersToReturn = _mapper.Map<IEnumerable<UserForListDtos>>(users);
-            System.Console.WriteLine(usersToReturn);
             return Ok(usersToReturn);
         }
 

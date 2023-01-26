@@ -109,7 +109,7 @@ internal class Program
             });
         }
 
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
 
         //adding cors
 

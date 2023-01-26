@@ -15,14 +15,14 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get(this.baseUrl + 'users', this.jwt()).pipe(
+    return this.http.get(this.baseUrl + 'users').pipe(
       map((response) => response as User[]),
       catchError(this.handleError)
     );
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id, this.jwt()).pipe(
+    return this.http.get<User>(this.baseUrl + 'users/' + id).pipe(
       map((response) => response),
       catchError(this.handleError)
     );
@@ -30,22 +30,22 @@ export class UserService {
 
   updateUser(id: number, user: User) {
     return this.http
-      .put(this.baseUrl + 'users/' + id, user, this.jwt())
+      .put(this.baseUrl + 'users/' + id, user)
       .pipe(catchError(this.handleError));
   }
 
-  private jwt() {
-    const token = localStorage.getItem('token');
+  // private jwt() {
+  //   const token = localStorage.getItem('token');
 
-    if (token) {
-      const headers = new HttpHeaders({
-        Authorization: 'Bearer ' + token,
-        'Content-type': 'application/json',
-      });
+  //   if (token) {
+  //     const headers = new HttpHeaders({
+  //       Authorization: 'Bearer ' + token,
+  //       'Content-type': 'application/json',
+  //     });
 
-      return { headers };
-    }
-  }
+  //     return { headers };
+  //   }
+  // }
 
   //handling exxception from server
   private handleError(error: HttpErrorResponse) {
