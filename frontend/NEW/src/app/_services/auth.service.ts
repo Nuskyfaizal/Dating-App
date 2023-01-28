@@ -7,12 +7,14 @@ import { catchError } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'src/environments/environment';
+import { User } from '../_models/User';
 
 @Injectable()
 export class AuthService {
   baseUrl = environment.apiUrl + 'auth/';
   userToken: any;
   decodedToken: any;
+  currentUser: User;
 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {}
 
@@ -22,13 +24,13 @@ export class AuthService {
       map((response: any) => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         const user = response;
-
         if (user) {
+          console.log(user);
           let token = user.token;
-
           localStorage.setItem('token', token);
+          localStorage.setItem('user', user.user);
           this.decodedToken = this.jwtHelper.decodeToken(token);
-          console.log(this.decodedToken);
+          this.currentUser = user.user;
           this.userToken = user;
         }
       }),

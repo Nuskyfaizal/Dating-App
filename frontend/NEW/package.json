@@ -21,6 +21,7 @@
     "@angular/router": "~9.1.11",
     "@auth0/angular-jwt": "^2.1.2",
     "@kolkov/ngx-gallery": "^1.2.3",
+    "@types/underscore": "^1.11.4",
     "alertifyjs": "^1.13.1",
     "bootstrap": "^3.4.1",
     "bootswatch": "^3.3.7",
@@ -29,6 +30,7 @@
     "ngx-bootstrap": "^4.3.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
+    "underscore": "^1.13.6",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
