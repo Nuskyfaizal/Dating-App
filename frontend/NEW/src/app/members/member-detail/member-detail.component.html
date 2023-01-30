@@ -8,7 +8,9 @@
       <div class="panel panel-default">
         <img
           class="profile-image thumbnail"
-          src="{{ user.photoUrl }}"
+          src="{{
+            user.photoUrl ? user.photoUrl : '../../../../../assets/user.jpg'
+          }}"
           alt="{{ user.knownAs }}"
         />
         <div class="panel-body">
