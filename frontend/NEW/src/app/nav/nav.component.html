@@ -69,7 +69,7 @@
       <!------->
       <ul *ngIf="loggedIn()" class="nav navbar-nav navbar-right">
         <li>
-          <img src="{{ authService.currentUser.photoUrl }}" alt="" />
+          <img src="{{ photoUrl }}" alt="" />
         </li>
         <li class="dropdown" dropdown>
           <a (click)="(false)" class="dropdown-toggle" dropdownToggle

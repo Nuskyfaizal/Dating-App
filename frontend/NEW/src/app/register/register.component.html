@@ -1,33 +1,236 @@
-<form #registerForm (ngSubmit)="register()">
+<form [formGroup]="registrationForm" (ngSubmit)="register()">
   <h2 class="text-center text-primary">Sign Up</h2>
 
   <hr />
-  <div class="form-group">
+  <!--gender-->
+  <div>
+    <label style="margin-right: 10px" class="control-label">I am a: </label>
+    <label class="radio-inline">
+      <input type="radio" value="male" formControlName="gender" />Male
+    </label>
+    <label class="radio-inline">
+      <input type="radio" value="female" formControlName="gender" />Female
+    </label>
+  </div>
+  <!--username-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('username').errors &&
+        registrationForm.get('username').touched
+    }"
+  >
     <input
       type="text"
       class="form-control"
-      name="username"
-      [(ngModel)]="models.username"
-      required
+      formControlName="username"
       placeholder="Username"
     />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('username').hasError('required') &&
+        registrationForm.get('username').touched
+      "
+    >
+      Username is required
+    </span>
+  </div>
+  <!--knownas-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('knownAs').touched &&
+        registrationForm.get('knownAs').hasError('required')
+    }"
+  >
+    <input
+      type="text"
+      class="form-control"
+      placeholder="known as"
+      formControlName="knownAs"
+    />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('knownAs').hasError('required') &&
+        registrationForm.get('knownAs').touched
+      "
+    >
+      Known as is required</span
+    >
+  </div>
+  <!--DOB-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('dateOfBirth').touched &&
+        registrationForm.get('dateOfBirth').hasError('required')
+    }"
+  >
+    <input
+      type="text"
+      bsDatepicker
+      class="form-control"
+      placeholder="Date Of Birth"
+      formControlName="dateOfBirth"
+    />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('dateOfBirth').hasError('required') &&
+        registrationForm.get('dateOfBirth').touched
+      "
+    >
+      Date Of Birth is required</span
+    >
+  </div>
+  <!--City-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('city').touched &&
+        registrationForm.get('city').hasError('required')
+    }"
+  >
+    <input
+      type="text"
+      class="form-control"
+      placeholder="City"
+      formControlName="city"
+    />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('city').hasError('required') &&
+        registrationForm.get('city').touched
+      "
+    >
+      City is required</span
+    >
+  </div>
+  <!--DOB-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('country').touched &&
+        registrationForm.get('country').hasError('required')
+    }"
+  >
+    <input
+      class="form-control"
+      placeholder="Country"
+      formControlName="country"
+    />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('country').hasError('required') &&
+        registrationForm.get('country').touched
+      "
+    >
+      Country is required</span
+    >
   </div>
 
-  <div class="form-group">
+  <!--password-->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        registrationForm.get('password').errors &&
+        registrationForm.get('password').touched
+    }"
+  >
     <input
       type="password"
       class="form-control"
-      name="password"
-      [(ngModel)]="models.password"
-      required
+      formControlName="password"
       placeholder="Password"
     />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('password').hasError('required') &&
+        registrationForm.get('password').touched
+      "
+    >
+      Password is required
+    </span>
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('password').hasError('minlength') &&
+        registrationForm.get('password').touched
+      "
+    >
+      Password must be atleast 4 characters
+    </span>
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('password').hasError('maxlength') &&
+        registrationForm.get('password').touched
+      "
+    >
+      Password cannot exceed 8 characters
+    </span>
   </div>
-
+  <!---->
+  <div
+    class="form-group"
+    [ngClass]="{
+      'has-error':
+        (registrationForm.get('confirmPassword').errors &&
+          registrationForm.get('confirmPassword').touched) ||
+        (registrationForm.get('confirmPassword').touched &&
+          registrationForm.hasError('mismatch'))
+    }"
+  >
+    <input
+      type="password"
+      class="form-control"
+      formControlName="confirmPassword"
+      placeholder="Confirm Password"
+    />
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('confirmPassword').hasError('required') &&
+        registrationForm.get('confirmPassword').touched
+      "
+    >
+      Confirm Password is required
+    </span>
+    <span
+      class="help-block"
+      *ngIf="
+        registrationForm.get('confirmPassword').touched &&
+        registrationForm.hasError('mismatch')
+      "
+    >
+      Confirm Password must match password
+    </span>
+  </div>
+  <!---->
   <div class="form-group text-center">
-    <button class="btn btn-success" type="submit">Register</button>
+    <button
+      class="btn btn-success"
+      type="submit"
+      [disabled]="!registrationForm.valid"
+    >
+      Register
+    </button>
     <button class="btn btn-default" (click)="cancel()" type="button">
       Cancel
     </button>
   </div>
 </form>
+
+<!-- <p>Form value: {{ registrationForm.value | json }}</p>
+<p>Form status: {{ registrationForm.status | json }}</p> -->

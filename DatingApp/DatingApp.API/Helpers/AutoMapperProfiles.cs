@@ -36,5 +36,6 @@ public class AutoMapperProfiles : Profile
 
         CreateMap<PhotoForCreationDTO, Photo>();
         CreateMap<Photo, PhotoForReturnDto>();
+        CreateMap<UserForRegisterDto, User>();
     }
 }
