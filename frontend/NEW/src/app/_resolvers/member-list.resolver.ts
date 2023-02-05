@@ -10,6 +10,9 @@ import { UserService } from '../_services/user.service';
   providedIn: 'root',
 })
 export class MemberListResolver {
+  pageSize = 5;
+  pageNumber = 1;
+
   constructor(
     private userService: UserService,
     private alertify: AlertifyService,
@@ -17,7 +20,7 @@ export class MemberListResolver {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<User[]> {
-    return this.userService.getUsers().pipe(
+    return this.userService.getUsers(this.pageNumber, this.pageSize).pipe(
       catchError((error) => {
         this.alertify.error('Problem retrieving data');
         this.router.navigate(['/home']);

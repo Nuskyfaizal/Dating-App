@@ -14,14 +14,11 @@ using System.Text;
 
 internal class Program
 {
-
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-
         // Add services to the container.
-
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -34,6 +31,7 @@ internal class Program
         //add repositiories
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
         builder.Services.AddScoped<IDatingRepository, DatingRepository>();
+        builder.Services.AddScoped<LogUserActivity>();
 
         //add authentication
         var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value);
@@ -60,7 +58,6 @@ internal class Program
         //Configuring the cloudinary
         builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
-
         /*****/
         var app = builder.Build();
 
@@ -81,14 +78,12 @@ internal class Program
             }
         }
 
-
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseDeveloperExceptionPage();
-
         }
         else
         {
@@ -110,23 +105,17 @@ internal class Program
         }
 
         //app.UseHttpsRedirection();
-
         //adding cors
-
         app.UseCors(x => x
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowAnyOrigin());
 
-
         app.UseAuthentication();
         app.UseAuthorization();
-
 
         app.MapControllers();
         //app.UseMvc();
         app.Run();
-
-
     }
 }

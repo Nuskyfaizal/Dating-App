@@ -8,11 +8,12 @@ import {
 import { User } from 'src/app/_models/User';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
-
+import { TimeAgoPipe } from 'ngx-pipes';
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css'],
+  providers: [TimeAgoPipe],
 })
 export class MemberDetailComponent implements OnInit {
   user: User;

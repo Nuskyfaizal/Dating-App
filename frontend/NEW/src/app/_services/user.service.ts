@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { User } from '../_models/User';
 import { Observable, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { PaginatedResult } from '../_models/pagination';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,27 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<User[]> {
-    return this.http.get(this.baseUrl + 'users').pipe(
-      map((response) => response as User[]),
+  getUsers(page?: number, itemsPerPage?: number): Observable<User[]> {
+    const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<
+      User[]
+    >();
+    let queryString = '?';
+
+    if (page != null && itemsPerPage != null) {
+      queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage;
+    }
+
+    return this.http.get(this.baseUrl + 'users' + queryString).pipe(
+      map((response: any) => {
+        paginatedResult.result = response;
+
+        if (response.headers.get('Pagination') != null) {
+          paginatedResult.pagination = JSON.parse(
+            response.headers.get('Pagination')
+          );
+        }
+        return paginatedResult.result;
+      }),
       catchError(this.handleError)
     );
   }

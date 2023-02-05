@@ -28,6 +28,7 @@
     "font-awesome": "^4.7.0",
     "ng2-file-upload": "^2.0.0-3",
     "ngx-bootstrap": "^4.3.0",
+    "ngx-pipes": "^2.7.5",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "underscore": "^1.13.6",
